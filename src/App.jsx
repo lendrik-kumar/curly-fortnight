@@ -2,7 +2,8 @@ import { useCallback, useEffect, useState } from 'react'
 import './App.css'
 
 const API_BASE_URL = (
-  import.meta.env.VITE_API_BASE_URL || 'https://sprint.blinus.in'
+  import.meta.env.VITE_API_BASE_URL ||
+  (import.meta.env.DEV ? '' : 'https://sprint.blinus.in')
 ).replace(/\/$/, '')
 
 const emptyForm = {
