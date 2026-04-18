@@ -253,7 +253,7 @@ function TeamForm({ onLogout }) {
         </p>
 
         <label className="field">
-          <span className="label">Presentation link with PPT or Video (optional)</span>
+          <span className="label">PPT link</span>
           <input
             type="url"
             placeholder="https://… (optional if deployed link is set)"
@@ -263,7 +263,7 @@ function TeamForm({ onLogout }) {
         </label>
 
         <label className="field">
-          <span className="label">Deployed app link</span>
+          <span className="label">Deployment(preffered) or Video (optional)</span>
           <input
             type="url"
             placeholder="https://… (optional if presentation link is set)"
