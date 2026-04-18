@@ -29,7 +29,7 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         '/api': {
-          target: `http://localhost:${apiPort}`,
+          target: `https://sprint.blinus.in/`,
           changeOrigin: true,
         },
       },
