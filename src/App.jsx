@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
 import './App.css'
 
+const API_BASE_URL = (
+  import.meta.env.VITE_API_BASE_URL || 'https://sprint.blinus.in'
+).replace(/\/$/, '')
+
 const emptyForm = {
   teamName: '',
   leaderName: '',
@@ -11,7 +15,11 @@ const emptyForm = {
 }
 
 async function api(path, options = {}) {
-  const res = await fetch(path, {
+  const url =
+    typeof path === 'string' && path.startsWith('/')
+      ? `${API_BASE_URL}${path}`
+      : path
+  const res = await fetch(url, {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
