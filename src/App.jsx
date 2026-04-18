@@ -5,6 +5,7 @@ const API_BASE_URL = (
   import.meta.env.VITE_API_BASE_URL ||
   (import.meta.env.DEV ? '' : 'https://sprint.blinus.in')
 ).replace(/\/$/, '')
+const SESSION_TOKEN_KEY = 'gdg_form_session_token'
 
 const emptyForm = {
   teamName: '',
@@ -16,6 +17,7 @@ const emptyForm = {
 }
 
 async function api(path, options = {}) {
+  const token = sessionStorage.getItem(SESSION_TOKEN_KEY)
   const url =
     typeof path === 'string' && path.startsWith('/')
       ? `${API_BASE_URL}${path}`
@@ -24,6 +26,7 @@ async function api(path, options = {}) {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(options.headers || {}),
     },
     ...options,
@@ -59,10 +62,13 @@ function LoginPanel({ onAuthed }) {
     setError('')
     setBusy(true)
     try {
-      await api('/api/auth/login', {
+      const data = await api('/api/auth/login', {
         method: 'POST',
         body: JSON.stringify({ accessKey: key }),
       })
+      if (data?.sessionToken) {
+        sessionStorage.setItem(SESSION_TOKEN_KEY, data.sessionToken)
+      }
       onAuthed()
     } catch (err) {
       setError(err.message)
@@ -173,7 +179,11 @@ function TeamForm({ onLogout }) {
   }
 
   async function logout() {
-    await api('/api/auth/logout', { method: 'POST' })
+    try {
+      await api('/api/auth/logout', { method: 'POST' })
+    } finally {
+      sessionStorage.removeItem(SESSION_TOKEN_KEY)
+    }
     onLogout()
   }
 
